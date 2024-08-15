@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+pre,
+code {
+  overflow-x: auto;
+  word-wrap: normal;
+  white-space: pre;
+}
