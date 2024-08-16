@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { FcLike } from "react-icons/fc";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebase";
 
 const BlogPage = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [morePosts, setMorePosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [user] = useAuthState(auth);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -17,6 +22,8 @@ const BlogPage = () => {
         setPost(data.post);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -44,8 +51,37 @@ const BlogPage = () => {
     return new Date(date).toLocaleDateString("en-US", options);
   };
 
+  const handleEdit = () => {
+    navigate(`/edit-post/${id}`);
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      try {
+        await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/posts/${id}`, {
+          method: "DELETE",
+        });
+        navigate("/");
+      } catch (error) {
+        console.error("Error deleting the post:", error);
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-gray-600 text-xl">Loading...</div>
+      </div>
+    );
+  }
+
   if (!post) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-gray-600 text-xl">No post found</div>
+      </div>
+    );
   }
 
   return (
@@ -91,9 +127,28 @@ const BlogPage = () => {
             </button>
             <p className="text-gray-600">{post.commentsCount} Comments</p>
           </div>
+
+          <div>
+            {user && user.uid === post.userId && (
+              <div className="flex items-center justify-between mt-8 border-t pt-4">
+                <button
+                  onClick={handleEdit}
+                  className="bg-green-600 hover:bg-green-700 py-2 px-4 rounded text-white"
+                >
+                  Edit Post
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="bg-red-600 hover:bg-red-700 py-2 px-4 rounded text-white"
+                >
+                  Delete Post
+                </button>
+              </div>
+            )}
+          </div>
         </article>
 
-        <aside className="py-6 border-t">
+        <div className="py-6 border-t">
           <h3 className="text-xl font-bold text-gray-800 mb-4">Other Posts</h3>
           <ul className="space-y-4">
             {morePosts.map((relatedPost, index) => (
@@ -107,7 +162,7 @@ const BlogPage = () => {
               </li>
             ))}
           </ul>
-        </aside>
+        </div>
       </main>
     </div>
   );

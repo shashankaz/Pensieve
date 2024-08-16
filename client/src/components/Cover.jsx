@@ -12,7 +12,7 @@ const Cover = () => {
         Read. Write. Deepen your understanding.
       </p>
       <Link to="/signup">
-        <button className="text-white bg-black rounded-3xl px-6 sm:px-8 md:px-10 py-2 font-semibold text-xs sm:text-sm">
+        <button className="btn41-43 btn-41 rounded-3xl px-6 sm:px-8 md:px-10 py-2 font-semibold text-xs sm:text-sm">
           Join the Community
         </button>
       </Link>

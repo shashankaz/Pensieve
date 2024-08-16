@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const Suggestions = () => {
   const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -11,8 +12,13 @@ const Suggestions = () => {
         // );
         // const data = await response.json();
         // setSuggestions(data.suggestions);
+        setTimeout(() => {
+          setSuggestions([]);
+          setLoading(false);
+        }, 2000);
       } catch (error) {
         console.error("Failed to fetch suggestions:", error);
+        setLoading(false);
       }
     };
 
@@ -20,17 +26,19 @@ const Suggestions = () => {
   }, []);
 
   return (
-    <div className="hidden lg:flex flex-col min-w-[30%] h-screen pt-24 fixed border-l border-black p-4">
+    <div className="hidden lg:flex flex-col min-w-[30%] h-screen mt-20 fixed border-l border-black p-4">
       <h2 className="text-lg font-bold mb-4">Suggestions</h2>
       <ul className="space-y-2">
-        {suggestions.length > 0 ? (
+        {loading ? (
+          <li className="text-gray-600">Loading suggestions...</li>
+        ) : suggestions.length > 0 ? (
           suggestions.map((suggestion) => (
             <li key={suggestion._id} className="hover:underline">
               <a href={`/post/${suggestion.slug}`}>{suggestion.title}</a>
             </li>
           ))
         ) : (
-          <li>No suggestions available</li>
+          <li className="text-gray-600">No suggestions available</li>
         )}
       </ul>
     </div>

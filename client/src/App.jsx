@@ -15,6 +15,7 @@ import Loading from "./components/Loading";
 import ScrollToTop from "./components/ScrollToTop";
 const BlogPage = lazy(() => import("./pages/BlogPage"));
 const CreateBlog = lazy(() => import("./pages/CreateBlog"));
+const EditPost = lazy(() => import("./pages/EditPost"));
 const Profile = lazy(() => import("./pages/Profile"));
 const EditProfile = lazy(() => import("./pages/EditProfile"));
 const SignIn = lazy(() => import("./pages/SignIn"));
@@ -55,6 +56,7 @@ const App = () => {
               )}
               <Route path="/blog/:id" element={<BlogPage />} />
               <Route path="/create" element={<CreateBlog />} />
+              <Route path="/edit-post/:id" element={<EditPost />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/edit-profile" element={<EditProfile />} />
               <Route path="/signin" element={<SignIn />} />

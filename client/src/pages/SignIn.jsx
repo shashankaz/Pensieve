@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
@@ -13,6 +13,7 @@ const SignIn = () => {
   } = useForm();
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (user) {
@@ -26,7 +27,7 @@ const SignIn = () => {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/");
     } catch (error) {
-      console.error(error.message);
+      setErrorMessage(error.message);
     }
   };
 
@@ -35,7 +36,7 @@ const SignIn = () => {
       await signInWithPopup(auth, googleProvider);
       navigate("/");
     } catch (error) {
-      console.error(error.message);
+      setErrorMessage(error.message);
     }
   };
 
@@ -56,6 +57,16 @@ const SignIn = () => {
             </Link>
           </p>
         </div>
+
+        {errorMessage && (
+          <div
+            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            role="alert"
+          >
+            <span className="block sm:inline">{errorMessage}</span>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
           <div className="space-y-4">
             <div>
