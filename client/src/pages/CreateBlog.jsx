@@ -44,12 +44,12 @@ const CreateBlog = () => {
       title,
       author: {
         name: user.displayName,
-        bio: bio || "unavailable",
+        bio: bio || "",
         profileImage: user.photoURL || "https://picsum.photos/100",
       },
       userId: user.uid,
       content,
-      headerImage: "unavailable",
+      headerImage: headerImage || "https://picsum.photos/1200/600",
       readTime: "10 min read",
       likes,
       commentsCount,
@@ -124,7 +124,7 @@ const CreateBlog = () => {
 
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            Content (use HTML tags and Tailwind for styling)
+            Content (use HTML tags and inline CSS for styling)
           </label>
           <textarea
             value={content}
@@ -139,7 +139,7 @@ const CreateBlog = () => {
         <div className="flex justify-center mt-6">
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded"
+            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded"
           >
             Create Post
           </button>

@@ -8,6 +8,8 @@ const Profile = () => {
   const [posts, setPosts] = useState([]);
   const [bio, setBio] = useState("");
   const [activeTab, setActiveTab] = useState("profile");
+  const [loadingPosts, setLoadingPosts] = useState(true);
+  const [loadingBio, setLoadingBio] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,8 +23,10 @@ const Profile = () => {
           );
           const data = await response.json();
           setPosts(data.posts || []);
+          setLoadingPosts(false);
         } catch (error) {
           console.error("Error fetching posts: ", error);
+          setLoadingPosts(false);
         }
       };
 
@@ -45,8 +49,10 @@ const Profile = () => {
               }
             );
           }
+          setLoadingBio(false);
         } catch (error) {
           console.error("Error fetching user bio: ", error);
+          setLoadingBio(false);
         }
       };
 
@@ -118,35 +124,41 @@ const Profile = () => {
         {activeTab === "profile" && (
           <div className="py-6">
             <div className="flex flex-col">
-              <div className="w-32 h-32 mb-4">
-                <img
-                  src={user.photoURL || "https://picsum.photos/100/100"}
-                  alt="Profile"
-                  className="w-full h-full rounded-full object-cover"
-                />
-              </div>
-              <h1 className="text-3xl sm:text-4xl font-semibold mb-1">
-                {user.displayName}
-              </h1>
-              <p className="text-gray-600">{user.email}</p>
-              <input
-                type="text"
-                placeholder="Bio"
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-              />
-              <button
-                onClick={handleBioUpdate}
-                className="bg-green-600 text-white w-28 mt-6 px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                Update Bio
-              </button>
-              <button
-                onClick={handleLogout}
-                className="bg-green-600 text-white w-28 mt-6 px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                Logout
-              </button>
+              {loadingBio ? (
+                <p className="text-gray-600">Loading profile...</p>
+              ) : (
+                <>
+                  <div className="w-32 h-32 mb-4">
+                    <img
+                      src={user.photoURL || "https://picsum.photos/100/100"}
+                      alt="Profile"
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  </div>
+                  <h1 className="text-3xl sm:text-4xl font-semibold mb-1">
+                    {user.displayName}
+                  </h1>
+                  <p className="text-gray-600">{user.email}</p>
+                  <input
+                    type="text"
+                    placeholder="Bio"
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                  />
+                  <button
+                    onClick={handleBioUpdate}
+                    className="bg-green-600 text-white w-28 mt-6 px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    Update Bio
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="bg-green-600 text-white w-28 mt-6 px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
             </div>
           </div>
         )}
@@ -156,7 +168,9 @@ const Profile = () => {
             <h2 className="text-2xl font-semibold mb-4 text-gray-800">
               Your Blog Posts
             </h2>
-            {posts.length > 0 ? (
+            {loadingPosts ? (
+              <p className="text-gray-600">Loading posts...</p>
+            ) : posts.length > 0 ? (
               <ul>
                 {posts.map((post) => {
                   const truncatedContent =
