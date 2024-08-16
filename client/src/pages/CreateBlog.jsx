@@ -10,6 +10,7 @@ const CreateBlog = () => {
   const [readTime, setReadTime] = useState("");
   const [likes, setLikes] = useState(0);
   const [commentsCount, setCommentsCount] = useState(0);
+  const [bio, setBio] = useState("");
 
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
@@ -17,6 +18,22 @@ const CreateBlog = () => {
   useEffect(() => {
     if (!user) {
       navigate("/signin");
+    } else {
+      const fetchUserBio = async () => {
+        try {
+          const response = await fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.uid}`
+          );
+          const data = await response.json();
+          if (data.success && data.user) {
+            setBio(data.user.bio);
+          }
+        } catch (error) {
+          console.error("Error fetching user bio:", error);
+        }
+      };
+
+      fetchUserBio();
     }
   }, [user, navigate]);
 
@@ -27,8 +44,8 @@ const CreateBlog = () => {
       title,
       author: {
         name: user.displayName,
-        bio: "unavailable",
-        profileImage: user.photoURL,
+        bio: bio || "unavailable",
+        profileImage: user.photoURL || "https://picsum.photos/100",
       },
       userId: user.uid,
       content,

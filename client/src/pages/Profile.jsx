@@ -6,6 +6,7 @@ import { auth } from "../firebase";
 const Profile = () => {
   const [user] = useAuthState(auth);
   const [posts, setPosts] = useState([]);
+  const [bio, setBio] = useState("");
   const [activeTab, setActiveTab] = useState("profile");
   const navigate = useNavigate();
 
@@ -25,9 +26,57 @@ const Profile = () => {
         }
       };
 
+      const fetchUserBio = async () => {
+        try {
+          const response = await fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.uid}`
+          );
+          const data = await response.json();
+          if (data.success && data.user) {
+            setBio(data.user.bio);
+          } else {
+            await fetch(
+              `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.uid}`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+          }
+        } catch (error) {
+          console.error("Error fetching user bio: ", error);
+        }
+      };
+
       fetchPosts();
+      fetchUserBio();
     }
   }, [user, navigate]);
+
+  const handleBioUpdate = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.uid}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ bio }),
+        }
+      );
+      const data = await response.json();
+      if (data.success) {
+        alert("Bio updated successfully!");
+      } else {
+        alert("Error updating bio: " + data.message);
+      }
+    } catch (error) {
+      console.error("Error updating bio: ", error);
+    }
+  };
 
   const handleLogout = () => {
     auth
@@ -80,6 +129,18 @@ const Profile = () => {
                 {user.displayName}
               </h1>
               <p className="text-gray-600">{user.email}</p>
+              <input
+                type="text"
+                placeholder="Bio"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+              />
+              <button
+                onClick={handleBioUpdate}
+                className="bg-green-600 text-white w-28 mt-6 px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                Update Bio
+              </button>
               <button
                 onClick={handleLogout}
                 className="bg-green-600 text-white w-28 mt-6 px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
