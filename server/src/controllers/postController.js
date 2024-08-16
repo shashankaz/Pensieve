@@ -22,7 +22,7 @@ export const getPostById = async (req, res) => {
     const post = await Post.findById(id);
 
     if (!post) {
-      res.status(404).json({
+      return res.status(404).json({
         status: "fail",
         message: "Post not found",
       });
@@ -42,12 +42,12 @@ export const getPostByUserId = async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const posts = await Post.find({userId: userId });
+    const posts = await Post.find({ userId });
 
-    if (!posts) {
-      res.status(404).json({
+    if (!posts.length) {
+      return res.status(404).json({
         status: "fail",
-        message: "User not found",
+        message: "No posts found for this user",
       });
     }
 
@@ -83,6 +83,13 @@ export const updatePost = async (req, res) => {
 
   try {
     const updatedPost = await Post.findById(id);
+
+    if (!updatedPost) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Post not found",
+      });
+    }
 
     updatedPost.title = title || updatedPost.title;
     updatedPost.content = content || updatedPost.content;

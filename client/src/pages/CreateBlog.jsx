@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const CreateBlog = () => {
   const [title, setTitle] = useState("");
@@ -124,16 +126,25 @@ const CreateBlog = () => {
 
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            Content (use HTML tags and inline CSS for styling)
+            Content
           </label>
-          <textarea
+          <ReactQuill
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={setContent}
             className="border rounded w-full py-2 px-3 text-gray-700"
-            rows="10"
             placeholder="Write your content here..."
-            required
-          ></textarea>
+            theme="snow"
+            style={{ height: "400px", overflowY: "auto" }}
+            modules={{
+              toolbar: [
+                [{ header: "1" }, { header: "2" }, { font: [] }],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["bold", "italic", "underline", "strike", "blockquote"],
+                ["link", "image", "video"],
+                ["clean"],
+              ],
+            }}
+          />
         </div>
 
         <div className="flex justify-center mt-6">

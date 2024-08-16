@@ -37,7 +37,8 @@ const BlogPage = () => {
           `${import.meta.env.VITE_BACKEND_URL}/api/posts`
         );
         const data = await response.json();
-        setMorePosts(data.posts.slice(0, 3));
+        const shuffledPosts = data.posts.sort(() => Math.random() - 0.5);
+        setMorePosts(shuffledPosts.slice(0, 3));
       } catch (error) {
         console.error(error);
       }

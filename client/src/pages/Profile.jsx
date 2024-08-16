@@ -144,19 +144,22 @@ const Profile = () => {
                     placeholder="Bio"
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
+                    className="mt-2"
                   />
-                  <button
-                    onClick={handleBioUpdate}
-                    className="bg-green-600 text-white w-28 mt-6 px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  >
-                    Update Bio
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="bg-green-600 text-white w-28 mt-6 px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  >
-                    Logout
-                  </button>
+                  <div className="flex gap-4">
+                    <button
+                      onClick={handleBioUpdate}
+                      className="bg-green-600 text-white w-28 mt-6 px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    >
+                      Update Bio
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="bg-green-600 text-white w-28 mt-6 px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    >
+                      Logout
+                    </button>
+                  </div>
                 </>
               )}
             </div>
@@ -166,7 +169,7 @@ const Profile = () => {
         {activeTab === "posts" && (
           <div className="py-6">
             <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-              Your Blog Posts
+              Your Blog Posts ({posts.length})
             </h2>
             {loadingPosts ? (
               <p className="text-gray-600">Loading posts...</p>

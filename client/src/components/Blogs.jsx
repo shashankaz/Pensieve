@@ -25,9 +25,11 @@ const Blogs = () => {
     fetchPosts();
   }, []);
 
-  const filteredPosts = posts.filter((post) =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredPosts = posts
+    .filter((post) =>
+      post.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .reverse();
 
   return (
     <div className="mx-4 sm:mx-8 md:mx-16 lg:mx-24 pt-20 my-10 w-full lg:pr-[30%]">
