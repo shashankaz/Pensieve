@@ -47,7 +47,7 @@ const Card = ({ post }) => {
         </div>
         <div className="flex justify-between items-center mt-4 text-gray-600 text-sm">
           <div>{formattedDate}</div>
-          <div className="flex items-center gap-4">
+          {/* <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
               <AiFillLike color="#374151" />
               {post.likes}
@@ -56,7 +56,7 @@ const Card = ({ post }) => {
               <FaComment color="#374151" />
               {post.commentsCount}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </Link>

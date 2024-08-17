@@ -121,13 +121,13 @@ const BlogPage = () => {
             dangerouslySetInnerHTML={{ __html: post.content }}
           ></div>
 
-          <div className="mt-8 flex items-center justify-between border-t pt-4">
+          {/* <div className="mt-8 flex items-center justify-between border-t pt-4">
             <button className="flex items-center gap-1">
               <FcLike />
               {post.likes} Likes
             </button>
             <p className="text-gray-600">{post.commentsCount} Comments</p>
-          </div>
+          </div> */}
 
           <div>
             {user && user.uid === post.userId && (

@@ -138,7 +138,7 @@ const CreateBlog = () => {
           <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>
         )}
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             Header Image
           </label>
@@ -156,7 +156,7 @@ const CreateBlog = () => {
               className="w-full h-64 object-cover rounded-lg"
             />
           </div>
-        )}
+        )} */}
 
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -187,7 +187,7 @@ const CreateBlog = () => {
             onClick={generateContent}
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded"
           >
-            Generate Content
+            Generate Content with AI
           </button>
         </div>
 
