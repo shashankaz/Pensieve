@@ -33,7 +33,7 @@ const Blogs = () => {
 
   return (
     <div className="mx-4 sm:mx-8 md:mx-16 lg:mx-24 pt-20 my-10 w-full lg:pr-[30%]">
-      <div className="hidden sm:flex items-center mb-6">
+      <div className="flex items-center mb-6">
         <div className="bg-gray-100 text-black py-3 pr-2 pl-4 rounded-l-3xl">
           <CiSearch />
         </div>

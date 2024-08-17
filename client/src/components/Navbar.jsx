@@ -21,11 +21,11 @@ const Navbar = () => {
         </Link>
       </div>
       {user ? (
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4 md:gap-8">
           <Link to={"/create"}>
-            <div className="hidden md:flex items-center gap-1 hover:text-green-600 transition-colors duration-300">
+            <div className="flex items-center gap-1 hover:text-green-600 transition-colors duration-300">
               <IoCreateOutline size={20} />
-              Write
+              <div className="hidden md:flex">Write</div>
             </div>
           </Link>
           <Link to={"/profile"}>
