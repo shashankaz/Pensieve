@@ -26,7 +26,8 @@ const CreateBlog = () => {
 
   const getAIResponse = async (prompt) => {
     try {
-      const result = await model.generateContent(prompt);
+      const newPrompt = `Write an article on ${prompt}`;
+      const result = await model.generateContent(newPrompt);
       const response = await result.response;
       const text = response.text();
       const htmlText = marked(text);
