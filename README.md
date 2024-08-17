@@ -1,6 +1,6 @@
 # Pensieve
 
-Pensieve is a full-stack blogging application built with the MERN stack (MongoDB, Express, React, Node.js). It allows users to create, read, update, and delete blog posts. The application features user authentication using Firebase (including Google Sign-In), rich text editing with React-Quill, and responsive design powered by Tailwind CSS.
+Pensieve is a full-stack blogging application built with the MERN stack (MongoDB, Express, React, Node.js). It allows users to create, read, update, and delete blog posts, with the feature of AI-generated content powered by the Gemini API. The application features user authentication using Firebase (including Google Sign-In), rich text editing with React-Quill, and responsive design powered by Tailwind CSS.
 
 ## Table of Contents
 
@@ -15,6 +15,7 @@ Pensieve is a full-stack blogging application built with the MERN stack (MongoDB
 ## Features
 
 - **User Authentication**: Secure authentication using Firebase, including email/password and Google Sign-In options.
+- **AI-Generated Content**: Create blog posts using the Gemini API for AI-generated content or manually type your posts.
 - **Create, Read, Update, Delete (CRUD)**: Users can create new blog posts, read existing posts, update their posts, and delete posts they no longer want.
 - **Rich Text Editing**: Compose and format blog posts using the React-Quill editor.
 - **User Profiles**: Each user has a profile page displaying their information and posts.
@@ -29,6 +30,7 @@ Before you begin, ensure you have met the following requirements:
 - **npm or Yarn**: Install npm or Yarn package manager
 - **MongoDB**: Set up a MongoDB database (You can use MongoDB Atlas for a cloud-based solution)
 - **Firebase Account**: Create a Firebase project for authentication
+- **Gemini API Access**: Obtain API key to use Gemini for AI content generation
 
 ## Installation
 
@@ -107,6 +109,7 @@ VITE_STORAGE_BUCKET=your_firebase_storage_bucket
 VITE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
 VITE_APP_ID=your_firebase_app_id
 VITE_BACKEND_URL=http://localhost:3000/api/
+VITE_GEMINI_API_KEY=your_gemini_api_key
 ```
 
 Obtain these credentials from your Firebase project settings.
@@ -114,7 +117,7 @@ Obtain these credentials from your Firebase project settings.
 ## Usage
 
 1. **Register or Sign In**: Create a new account or sign in using your email/password or Google account.
-2. **Create a Post**: Navigate to the "Create" page to compose a new blog post using the rich text editor.
+2. **Create a Post**: Navigate to the "Create" page to compose a new blog post using the rich text editor or generate content using the Gemini AI.
 3. **View Posts**: Browse all posts on the feed or view individual posts.
 4. **Edit/Delete Posts**: Edit or delete your own posts from your profile.
 5. **Edit Profile**: Update your profile information.
@@ -129,14 +132,14 @@ http://localhost:5000/api/posts
 
 ### Endpoints
 
-| Method | Endpoint             | Description                      |
-| ------ | -------------------- | -------------------------------- |
-| GET    | `/`                  | Get all posts                    |
-| GET    | `/:id`               | Get a single post by ID          |
-| GET    | `/user/:userId`      | Get all posts by a specific user |
-| POST   | `/`                  | Create a new post                |
-| PUT    | `/:id`               | Update a post by ID              |
-| DELETE | `/:id`               | Delete a post by ID              |
+| Method | Endpoint             | Description                          |
+| ------ | -------------------- | ------------------------------------ |
+| GET    | `/`                  | Get all posts                        |
+| GET    | `/:id`               | Get a single post by ID              |
+| GET    | `/user/:userId`      | Get all posts by a specific user     |
+| POST   | `/`                  | Create a new post                    |
+| PUT    | `/:id`               | Update a post by ID                  |
+| DELETE | `/:id`               | Delete a post by ID                  |
 
 ## Technologies Used
 
@@ -146,6 +149,7 @@ http://localhost:5000/api/posts
 - **React Router**: Declarative routing for React applications.
 - **Tailwind CSS**: Utility-first CSS framework for rapid UI development.
 - **React-Quill**: Rich text editor component for React.
+- **Gemini API**: AI-powered content generation API.
 - **Vite**: Fast development server and build tool for modern web applications.
 
 ### Backend
