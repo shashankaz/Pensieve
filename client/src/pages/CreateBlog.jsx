@@ -4,18 +4,48 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { marked } from "marked";
 
 const CreateBlog = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [headerImage, setHeaderImage] = useState(null);
-  const [readTime, setReadTime] = useState("");
+  const [readTime, setReadTime] = useState("10 min read");
   const [likes, setLikes] = useState(0);
   const [commentsCount, setCommentsCount] = useState(0);
   const [bio, setBio] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
+
+  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+  const getAIResponse = async (prompt) => {
+    try {
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+      const htmlText = marked(text);
+      return htmlText;
+    } catch (error) {
+      console.error("Error generating response:", error);
+      return "Sorry, I couldn't process your request.";
+    }
+  };
+
+  const generateContent = async () => {
+    if (!title) {
+      setErrorMessage("Please enter a title first to generate content.");
+      return;
+    }
+    setErrorMessage("");
+    const aiResponse = await getAIResponse(title);
+    setContent(aiResponse);
+  };
 
   useEffect(() => {
     if (!user) {
@@ -52,7 +82,7 @@ const CreateBlog = () => {
       userId: user.uid,
       content,
       headerImage: headerImage || "https://picsum.photos/1200/600",
-      readTime: "10 min read",
+      readTime,
       likes,
       commentsCount,
     };
@@ -98,11 +128,15 @@ const CreateBlog = () => {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="border rounded w-full py-2 px-3 text-gray-700"
+            className="rounded w-full py-2 text-gray-700 outline-none"
             placeholder="Enter the title"
             required
           />
         </div>
+
+        {errorMessage && (
+          <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>
+        )}
 
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -110,7 +144,7 @@ const CreateBlog = () => {
           </label>
           <input
             type="file"
-            className="border rounded w-full py-2 px-3 text-gray-700"
+            className="rounded w-full py-2 text-gray-700"
           />
         </div>
 
@@ -131,7 +165,7 @@ const CreateBlog = () => {
           <ReactQuill
             value={content}
             onChange={setContent}
-            className="border rounded w-full py-2 px-3 text-gray-700"
+            className="rounded w-full py-2 text-gray-700"
             placeholder="Write your content here..."
             theme="snow"
             style={{ height: "400px", overflowY: "auto" }}
@@ -140,11 +174,21 @@ const CreateBlog = () => {
                 [{ header: "1" }, { header: "2" }, { font: [] }],
                 [{ list: "ordered" }, { list: "bullet" }],
                 ["bold", "italic", "underline", "strike", "blockquote"],
-                ["link", "image", "video"],
+                ["link"],
                 ["clean"],
               ],
             }}
           />
+        </div>
+
+        <div className="flex justify-center mt-4">
+          <button
+            type="button"
+            onClick={generateContent}
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded"
+          >
+            Generate Content
+          </button>
         </div>
 
         <div className="flex justify-center mt-6">
