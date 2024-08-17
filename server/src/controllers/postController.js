@@ -120,3 +120,127 @@ export const deletePost = async (req, res) => {
     handleErrors(res, error);
   }
 };
+
+export const showComments = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Post not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Comments fetched successfully",
+      comments: post.comments,
+    });
+  } catch (error) {
+    handleErrors(res, error);
+  }
+};
+
+export const addComment = async (req, res) => {
+  const { id } = req.params;
+  const { userId, text } = req.body;
+
+  try {
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Post not found",
+      });
+    }
+
+    const newComment = { userId, text };
+    post.comments.push(newComment);
+    post.commentsCount += 1;
+
+    await post.save();
+
+    res.status(201).json({
+      status: "success",
+      message: "Comment added successfully",
+      post,
+    });
+  } catch (error) {
+    handleErrors(res, error);
+  }
+};
+
+export const updateComment = async (req, res) => {
+  const { id, commentId } = req.params;
+  const { text } = req.body;
+
+  try {
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Post not found",
+      });
+    }
+
+    const comment = post.comments.id(commentId);
+    if (!comment) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Comment not found",
+      });
+    }
+
+    comment.text = text || comment.text;
+    await post.save();
+
+    res.status(200).json({
+      status: "success",
+      message: "Comment updated successfully",
+      post,
+    });
+  } catch (error) {
+    handleErrors(res, error);
+  }
+};
+
+export const deleteComment = async (req, res) => {
+  const { id, commentId } = req.params;
+
+  try {
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Post not found",
+      });
+    }
+
+    const comment = post.comments.id(commentId);
+    if (!comment) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Comment not found",
+      });
+    }
+
+    comment.remove();
+    post.commentsCount -= 1;
+
+    await post.save();
+
+    res.status(200).json({
+      status: "success",
+      message: "Comment deleted successfully",
+      post,
+    });
+  } catch (error) {
+    handleErrors(res, error);
+  }
+};
