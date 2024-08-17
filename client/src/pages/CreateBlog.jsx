@@ -14,7 +14,7 @@ const CreateBlog = () => {
   const [readTime, setReadTime] = useState("10 min read");
   const [likes, setLikes] = useState(0);
   const [commentsCount, setCommentsCount] = useState(0);
-  const [bio, setBio] = useState("");
+  const [bio, setBio] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   const [user] = useAuthState(auth);
@@ -77,7 +77,7 @@ const CreateBlog = () => {
       title,
       author: {
         name: user.displayName,
-        bio: bio || "",
+        bio: bio || "I'm a blogger on the web.",
         profileImage: user.photoURL || "https://picsum.photos/100",
       },
       userId: user.uid,
