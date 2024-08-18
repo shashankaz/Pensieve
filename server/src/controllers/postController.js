@@ -121,32 +121,9 @@ export const deletePost = async (req, res) => {
   }
 };
 
-export const showComments = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const post = await Post.findById(id);
-
-    if (!post) {
-      return res.status(404).json({
-        status: "fail",
-        message: "Post not found",
-      });
-    }
-
-    res.status(200).json({
-      status: "success",
-      message: "Comments fetched successfully",
-      comments: post.comments,
-    });
-  } catch (error) {
-    handleErrors(res, error);
-  }
-};
-
 export const addComment = async (req, res) => {
   const { id } = req.params;
-  const { userId, text } = req.body;
+  const { userId, username, text } = req.body;
 
   try {
     const post = await Post.findById(id);
@@ -158,9 +135,8 @@ export const addComment = async (req, res) => {
       });
     }
 
-    const newComment = { userId, text };
+    const newComment = { userId, username, text };
     post.comments.push(newComment);
-    post.commentsCount += 1;
 
     await post.save();
 
@@ -210,10 +186,10 @@ export const updateComment = async (req, res) => {
 };
 
 export const deleteComment = async (req, res) => {
-  const { id, commentId } = req.params;
+  const { postId, commentId } = req.params;
 
   try {
-    const post = await Post.findById(id);
+    const post = await Post.findById(postId);
 
     if (!post) {
       return res.status(404).json({
@@ -231,8 +207,6 @@ export const deleteComment = async (req, res) => {
     }
 
     comment.remove();
-    post.commentsCount -= 1;
-
     await post.save();
 
     res.status(200).json({

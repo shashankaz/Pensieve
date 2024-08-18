@@ -1,21 +1,5 @@
 import mongoose from "mongoose";
 
-const commentSchema = mongoose.Schema(
-  {
-    userId: {
-      type: String,
-      required: true,
-    },
-    text: {
-      type: String,
-      required: true,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
-
 const postSchema = mongoose.Schema(
   {
     title: {
@@ -56,11 +40,22 @@ const postSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    commentsCount: {
-      type: Number,
-      default: 0,
-    },
-    comments: [commentSchema],
+    comments: [
+      {
+        username: {
+          type: String,
+          required: true,
+        },
+        text: {
+          type: String,
+          required: true,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
