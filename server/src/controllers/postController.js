@@ -1,5 +1,7 @@
 import Post from "../models/postModel.js";
 import { handleErrors } from "../utils/helpers.js";
+import cloudinary from "../config/cloudinaryConfig.js";
+import fs from "fs";
 
 export const getPosts = async (req, res) => {
   try {
@@ -116,6 +118,24 @@ export const deletePost = async (req, res) => {
       status: "success",
       message: "Post deleted successfully",
     });
+  } catch (error) {
+    handleErrors(res, error);
+  }
+};
+
+export const uploadImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "Please upload a file" });
+    }
+
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "blog-headers",
+    });
+
+    fs.unlinkSync(req.file.path);
+
+    res.status(200).json({ imageUrl: result.secure_url });
   } catch (error) {
     handleErrors(res, error);
   }

@@ -6,10 +6,12 @@ import {
   createPost,
   updatePost,
   deletePost,
+  uploadImage,
   addComment,
   updateComment,
   deleteComment,
 } from "../controllers/postController.js";
+import upload from "../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
 
@@ -22,5 +24,6 @@ router.delete("/:id", deletePost);
 router.post("/:id/comments", addComment);
 router.put("/:id/comments/:commentId", updateComment);
 router.delete("/:id/comments/:commentId", deleteComment);
+router.post("/upload", upload.single("headerImage"), uploadImage);
 
 export default router;

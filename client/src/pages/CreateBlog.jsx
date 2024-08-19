@@ -11,6 +11,7 @@ const CreateBlog = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [headerImage, setHeaderImage] = useState(null);
+  const [headerImageUrl, setHeaderImageUrl] = useState("");
   const [readTime, setReadTime] = useState("10 min read");
   const [likes, setLikes] = useState(0);
   const [commentsCount, setCommentsCount] = useState(0);
@@ -70,8 +71,37 @@ const CreateBlog = () => {
     }
   }, [user, navigate]);
 
+  const handleImageUpload = async () => {
+    const formData = new FormData();
+    formData.append("headerImage", headerImage);
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/posts/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        setHeaderImageUrl(data.imageUrl);
+      } else {
+        alert("Image upload failed");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Image upload failed");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // if (headerImage) {
+    //   await handleImageUpload();
+    // }
 
     const newPost = {
       title,
@@ -82,7 +112,7 @@ const CreateBlog = () => {
       },
       userId: user.uid,
       content,
-      headerImage: headerImage || "https://picsum.photos/1200/600",
+      headerImage: headerImageUrl || "https://picsum.photos/1200/600",
       readTime,
       likes,
       commentsCount,
@@ -139,20 +169,22 @@ const CreateBlog = () => {
           <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>
         )}
 
-        {/* <div className="mb-4">
+        <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             Header Image
           </label>
           <input
             type="file"
             className="rounded w-full py-2 text-gray-700"
+            // onChange={(e) => setHeaderImage(e.target.files[0])}
+            // required
           />
         </div>
 
-        {headerImage && (
+        {/* {headerImageUrl && (
           <div className="mb-4">
             <img
-              src={headerImage}
+              src={headerImageUrl}
               alt="Header Preview"
               className="w-full h-64 object-cover rounded-lg"
             />
