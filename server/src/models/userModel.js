@@ -10,6 +10,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  bookmarks: {
+    type: [String],
+    default: [],
+  },
 });
 
 const User = mongoose.model("User", userSchema);

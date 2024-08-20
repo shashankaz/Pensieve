@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { FcLike } from "react-icons/fc";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase";
 import { formatDistanceToNow } from "date-fns";
@@ -12,6 +12,7 @@ const BlogPage = () => {
   const [loading, setLoading] = useState(true);
   const [user] = useAuthState(auth);
   const [newComment, setNewComment] = useState("");
+  const [bookmark, setBookmark] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -144,6 +145,16 @@ const BlogPage = () => {
             <p>{formatDate(post.createdAt)}</p>
             <span className="mx-2">•</span>
             <p>{post.readTime}</p>
+            <span className="mx-2">•</span>
+            <p
+              onClick={(e) => {
+                setBookmark(!bookmark);
+              }}
+              className="cursor-pointer"
+              title="Bookmark this post"
+            >
+              {bookmark ? <FaBookmark /> : <FaRegBookmark />}
+            </p>
           </div>
           <div
             className="mt-6 text-gray-700 space-y-6"
@@ -198,7 +209,7 @@ const BlogPage = () => {
             )}
           </div>
 
-          <div>
+          {/* <div>
             {user && user.uid === post.userId && (
               <div className="flex items-center justify-between mt-6">
                 <button
@@ -215,7 +226,7 @@ const BlogPage = () => {
                 </button>
               </div>
             )}
-          </div>
+          </div> */}
         </article>
 
         <div className="py-6 border-t">

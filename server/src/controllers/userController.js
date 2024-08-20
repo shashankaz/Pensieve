@@ -76,3 +76,49 @@ export const updateUserBio = async (req, res) => {
     handleErrors(res, error);
   }
 };
+
+export const updateBookmark = async (req, res) => {
+  const { userId, postId } = req.params;
+
+  try {
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (!postId) {
+      return res.status(400).json({
+        success: false,
+        message: "Post ID is required",
+      });
+    }
+
+    const bookmarkIndex = user.bookmarks.indexOf(postId);
+
+    if (bookmarkIndex > -1) {
+      user.bookmarks.splice(bookmarkIndex, 1);
+      await user.save();
+
+      return res.json({
+        success: true,
+        message: "Bookmark removed",
+        bookmarks: user.bookmarks,
+      });
+    } else {
+      user.bookmarks.push(postId);
+      await user.save();
+
+      return res.json({
+        success: true,
+        message: "Bookmark created",
+        bookmarks: user.bookmarks,
+      });
+    }
+  } catch (error) {
+    handleErrors(res, error);
+  }
+};

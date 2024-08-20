@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaComment } from "react-icons/fa";
-import { AiFillLike } from "react-icons/ai";
+import { FaComment, FaBookmark } from "react-icons/fa";
 import { formatDistanceToNow } from "date-fns";
 
 const Card = ({ post }) => {
@@ -47,16 +46,16 @@ const Card = ({ post }) => {
         </div>
         <div className="flex justify-between items-center mt-4 text-gray-600 text-sm">
           <div>{formattedDate}</div>
-          {/* <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
-              <AiFillLike color="#374151" />
+              <FaBookmark color="#374151" />
               {post.likes}
             </div>
             <div className="flex items-center gap-1">
               <FaComment color="#374151" />
-              {post.commentsCount}
+              {post.comments.length}
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
     </Link>

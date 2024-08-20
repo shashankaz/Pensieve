@@ -6,9 +6,11 @@ import { auth } from "../firebase";
 const Profile = () => {
   const [user] = useAuthState(auth);
   const [posts, setPosts] = useState([]);
+  const [bookmarks, setBookmarks] = useState([]);
   const [bio, setBio] = useState("");
   const [activeTab, setActiveTab] = useState("profile");
   const [loadingPosts, setLoadingPosts] = useState(true);
+  const [loadingBookmarks, setLoadingBookmarks] = useState(true);
   const [loadingBio, setLoadingBio] = useState(true);
   const navigate = useNavigate();
 
@@ -27,6 +29,22 @@ const Profile = () => {
         } catch (error) {
           console.error("Error fetching posts: ", error);
           setLoadingPosts(false);
+        }
+      };
+
+      const fetchBookmarks = async () => {
+        try {
+          // const response = await fetch(
+          //   `${import.meta.env.VITE_BACKEND_URL}/api/users/${
+          //     user.uid
+          //   }/bookmarks`
+          // );
+          // const data = await response.json();
+          // setBookmarks(data.posts || []);
+          setLoadingBookmarks(false);
+        } catch (error) {
+          console.error("Error fetching bookmarks: ", error);
+          setLoadingBookmarks(false);
         }
       };
 
@@ -57,6 +75,7 @@ const Profile = () => {
       };
 
       fetchPosts();
+      fetchBookmarks();
       fetchUserBio();
     }
   }, [user, navigate]);
@@ -118,6 +137,16 @@ const Profile = () => {
             onClick={() => setActiveTab("posts")}
           >
             Your Posts
+          </button>
+          <button
+            className={`text-lg font-semibold pb-2 ${
+              activeTab === "bookmark"
+                ? "border-b-2 border-green-600 text-green-600"
+                : "text-gray-600 hover:text-gray-800"
+            }`}
+            onClick={() => setActiveTab("bookmark")}
+          >
+            Bookmarks
           </button>
         </div>
 
@@ -182,7 +211,7 @@ const Profile = () => {
                       : post.content;
 
                   return (
-                    <Link to={`/blog/${post._id}`} key={post._id} className="">
+                    <Link to={`/blog/${post._id}`} key={post._id}>
                       <li className="p-4 bg-gray-50 mb-6 rounded-lg shadow-md hover:shadow-lg">
                         <h3 className="text-xl font-semibold">{post.title}</h3>
                         <p
@@ -197,6 +226,42 @@ const Profile = () => {
             ) : (
               <p className="text-gray-600">
                 You have not created any posts yet.
+              </p>
+            )}
+          </div>
+        )}
+
+        {activeTab === "bookmark" && (
+          <div className="py-6">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+              Your Bookmarks ({bookmarks.length})
+            </h2>
+            {loadingBookmarks ? (
+              <p className="text-gray-600">Loading bookmarks...</p>
+            ) : bookmarks.length > 0 ? (
+              <ul>
+                {bookmarks.map((post) => {
+                  const truncatedContent =
+                    post.content.length > 150
+                      ? post.content.slice(0, 150) + "..."
+                      : post.content;
+
+                  return (
+                    <Link to={`/blog/${post._id}`} key={post._id}>
+                      <li className="p-4 bg-gray-50 mb-6 rounded-lg shadow-md hover:shadow-lg">
+                        <h3 className="text-xl font-semibold">{post.title}</h3>
+                        <p
+                          className="text-gray-600"
+                          dangerouslySetInnerHTML={{ __html: truncatedContent }}
+                        ></p>
+                      </li>
+                    </Link>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className="text-gray-600">
+                You have not bookmarked any posts yet.
               </p>
             )}
           </div>
