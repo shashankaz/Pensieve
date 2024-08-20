@@ -17,6 +17,7 @@ const CreateBlog = () => {
   const [commentsCount, setCommentsCount] = useState(0);
   const [bio, setBio] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
@@ -87,8 +88,10 @@ const CreateBlog = () => {
       const data = await response.json();
       if (response.ok) {
         setHeaderImageUrl(data.imageUrl);
+        setUploading(false);
       } else {
         alert("Image upload failed");
+        setUploading(false);
       }
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -99,26 +102,27 @@ const CreateBlog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // if (headerImage) {
-    //   await handleImageUpload();
-    // }
-
-    const newPost = {
-      title,
-      author: {
-        name: user.displayName,
-        bio: bio || "I'm a blogger on the web.",
-        profileImage: user.photoURL || "https://picsum.photos/100",
-      },
-      userId: user.uid,
-      content,
-      headerImage: headerImageUrl || "https://picsum.photos/1200/600",
-      readTime,
-      likes,
-      commentsCount,
-    };
-
     try {
+      if (!headerImageUrl) {
+        alert("Please upload the header image first.");
+        return;
+      }
+
+      const newPost = {
+        title,
+        author: {
+          name: user.displayName,
+          bio: bio || "I'm a blogger on the web.",
+          profileImage: user.photoURL || "https://picsum.photos/100",
+        },
+        userId: user.uid,
+        content,
+        headerImage: headerImageUrl || "https://picsum.photos/1200/600",
+        readTime,
+        likes,
+        commentsCount,
+      };
+
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/posts`,
         {
@@ -176,20 +180,34 @@ const CreateBlog = () => {
           <input
             type="file"
             className="rounded w-full py-2 text-gray-700"
-            // onChange={(e) => setHeaderImage(e.target.files[0])}
-            // required
+            onChange={(e) => setHeaderImage(e.target.files[0])}
+            required
           />
+          <button
+            type="button"
+            onClick={async (e) => {
+              e.preventDefault();
+              setUploading(true);
+              await handleImageUpload();
+            }}
+            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded mt-2"
+          >
+            Upload
+          </button>
+          {uploading && (
+            <p className="text-sm text-gray-700 mt-2">Uploading image...</p>
+          )}
         </div>
 
-        {/* {headerImageUrl && (
+        {headerImageUrl && (
           <div className="mb-4">
             <img
               src={headerImageUrl}
               alt="Header Preview"
-              className="w-full h-64 object-cover rounded-lg"
+              className="w-full h-80 object-cover rounded-lg"
             />
           </div>
-        )} */}
+        )}
 
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">

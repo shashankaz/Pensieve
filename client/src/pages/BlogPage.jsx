@@ -117,9 +117,9 @@ const BlogPage = () => {
   return (
     <div className="min-h-screen flex justify-center py-10 pt-32 px-4">
       <main className="w-full max-w-3xl mx-auto">
-        <div>
+        <div className="w-[48rem] h-[25.5rem] overflow-hidden">
           <img
-            src="https://picsum.photos/1200/600"
+            src={post.headerImage}
             alt="Blog Header"
             className="w-full h-auto object-cover"
           />
