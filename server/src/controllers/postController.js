@@ -129,11 +129,16 @@ export const uploadImage = async (req, res) => {
       return res.status(400).json({ error: "Please upload a file" });
     }
 
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "blog-headers",
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "blog-headers" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      stream.end(req.file.buffer);
     });
-
-    fs.unlinkSync(req.file.path);
 
     res.status(200).json({ imageUrl: result.secure_url });
   } catch (error) {
