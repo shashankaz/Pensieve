@@ -20,7 +20,7 @@ const Card = ({ post }) => {
         <div className="flex items-center gap-2 mb-2">
           <div className="h-6 w-6 rounded-full bg-black overflow-hidden">
             <img
-              src="https://picsum.photos/100"
+              src={post.author.profileImage}
               alt="Profile"
               className="w-full h-full object-cover"
             />
@@ -39,7 +39,7 @@ const Card = ({ post }) => {
           </div>
           <div className="w-24 h-16 md:w-48 md:h-32 bg-gray-200 rounded-sm overflow-hidden">
             <img
-              src="https://picsum.photos/150"
+              src={post.headerImage}
               alt="Blog Preview"
               className="w-full h-full object-cover hover:scale-110 transition-transform"
             />

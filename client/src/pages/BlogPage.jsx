@@ -129,7 +129,7 @@ const BlogPage = () => {
           <h2 className="text-4xl font-bold text-gray-800">{post.title}</h2>
           <div className="flex items-center mt-4">
             <img
-              src="https://picsum.photos/100"
+              src={post.author.profileImage}
               alt="Author"
               className="w-12 h-12 rounded-full mr-4"
             />
