@@ -1,7 +1,6 @@
 import Post from "../models/postModel.js";
 import { handleErrors } from "../utils/helpers.js";
 import cloudinary from "../config/cloudinaryConfig.js";
-import readingTime from "reading-time";
 
 export const getPosts = async (req, res) => {
   try {
