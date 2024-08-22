@@ -36,6 +36,10 @@ const postSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    imgPublicId: {
+      type: String,
+      required: true,
+    },
     likes: {
       type: Number,
       default: 0,

@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const EditPost = () => {
   const { id } = useParams();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [headerImage, setHeaderImage] = useState(null);
-
+  const [headerImageUrl, setHeaderImageUrl] = useState("");
+  const [publicId, setPublicId] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [uploading, setUploading] = useState(false);
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
 
@@ -25,26 +30,61 @@ const EditPost = () => {
           const post = data.post;
           setTitle(post.title);
           setContent(post.content);
-          // setHeaderImage(post.headerImage);
+          setHeaderImageUrl(post.headerImage);
+          setPublicId(post.imgPublicId);
         } catch (error) {
           console.error("Error fetching post:", error);
         }
       };
-
       fetchPost();
     }
   }, [user, id, navigate]);
 
+  const handleImageUpload = async () => {
+    const formData = new FormData();
+    formData.append("headerImage", headerImage);
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/posts/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        setHeaderImageUrl(data.imageUrl);
+        setPublicId(data.publicId);
+        setUploading(false);
+      } else {
+        setErrorMessage("Image upload failed.");
+        setUploading(false);
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setErrorMessage("Image upload failed.");
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const updatedPost = {
-      title,
-      content,
-      headerImage: "unavailable",
-    };
+    if (!headerImageUrl) {
+      setErrorMessage("Please upload the header image first.");
+      return;
+    }
 
     try {
+      const updatedPost = {
+        title,
+        content,
+        headerImage: headerImageUrl,
+        imgPublicId: publicId,
+      };
+
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/posts/${id}`,
         {
@@ -60,10 +100,11 @@ const EditPost = () => {
         alert("Blog post updated successfully!");
         navigate(`/blog/${id}`);
       } else {
-        alert("Failed to update blog post");
+        setErrorMessage("Failed to update blog post.");
       }
     } catch (error) {
       console.error("Error updating post:", error);
+      setErrorMessage("Failed to update blog post.");
     }
   };
 
@@ -85,11 +126,15 @@ const EditPost = () => {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="border rounded w-full py-2 px-3 text-gray-700"
+            className="rounded w-full py-2 text-gray-700 outline-none"
             placeholder="Enter the title"
             required
           />
         </div>
+
+        {errorMessage && (
+          <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>
+        )}
 
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -97,38 +142,60 @@ const EditPost = () => {
           </label>
           <input
             type="file"
-            className="border rounded w-full py-2 px-3 text-gray-700"
+            className="rounded w-full py-2 text-gray-700"
+            onChange={(e) => setHeaderImage(e.target.files[0])}
           />
+          <button
+            type="button"
+            onClick={async (e) => {
+              e.preventDefault();
+              setUploading(true);
+              await handleImageUpload();
+            }}
+            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded mt-2"
+            disabled={uploading}
+          >
+            {uploading ? "Uploading..." : "Upload"}
+          </button>
         </div>
 
-        {headerImage && (
+        {headerImageUrl && (
           <div className="mb-4">
             <img
-              src={headerImage}
+              src={headerImageUrl}
               alt="Header Preview"
-              className="w-full h-64 object-cover rounded-lg"
+              className="w-full h-80 object-cover rounded-lg"
             />
           </div>
         )}
 
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            Content (use HTML tags and Tailwind for styling)
+            Content
           </label>
-          <textarea
+          <ReactQuill
             value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="border rounded w-full py-2 px-3 text-gray-700"
-            rows="10"
+            onChange={setContent}
+            className="rounded w-full py-2 text-gray-700"
             placeholder="Write your content here..."
-            required
-          ></textarea>
+            theme="snow"
+            style={{ height: "400px", overflowY: "auto" }}
+            modules={{
+              toolbar: [
+                [{ header: "1" }, { header: "2" }, { font: [] }],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["bold", "italic", "underline", "strike", "blockquote"],
+                ["link"],
+                ["clean"],
+              ],
+            }}
+          />
         </div>
 
         <div className="flex justify-center mt-6">
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded"
+            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded"
           >
             Update Post
           </button>

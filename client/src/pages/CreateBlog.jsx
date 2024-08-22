@@ -12,6 +12,7 @@ const CreateBlog = () => {
   const [content, setContent] = useState("");
   const [headerImage, setHeaderImage] = useState(null);
   const [headerImageUrl, setHeaderImageUrl] = useState("");
+  const [publicId, setPublicId] = useState("");
   const [readTime, setReadTime] = useState("10 min read");
   const [likes, setLikes] = useState(0);
   const [commentsCount, setCommentsCount] = useState(0);
@@ -88,6 +89,7 @@ const CreateBlog = () => {
       const data = await response.json();
       if (response.ok) {
         setHeaderImageUrl(data.imageUrl);
+        setPublicId(data.publicId);
         setUploading(false);
       } else {
         alert("Image upload failed");
@@ -118,6 +120,7 @@ const CreateBlog = () => {
         userId: user.uid,
         content,
         headerImage: headerImageUrl || "https://picsum.photos/1200/600",
+        imgPublicId: publicId,
         readTime,
         likes,
         commentsCount,
@@ -191,12 +194,10 @@ const CreateBlog = () => {
               await handleImageUpload();
             }}
             className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded mt-2"
+            disabled={uploading}
           >
-            Upload
+            {uploading ? "Uploading..." : "Upload"}
           </button>
-          {uploading && (
-            <p className="text-sm text-gray-700 mt-2">Uploading image...</p>
-          )}
         </div>
 
         {headerImageUrl && (

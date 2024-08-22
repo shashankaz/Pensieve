@@ -209,7 +209,7 @@ const BlogPage = () => {
             )}
           </div>
 
-          {/* <div>
+          <div>
             {user && user.uid === post.userId && (
               <div className="flex items-center justify-between mt-6">
                 <button
@@ -226,7 +226,7 @@ const BlogPage = () => {
                 </button>
               </div>
             )}
-          </div> */}
+          </div>
         </article>
 
         <div className="py-6 border-t">

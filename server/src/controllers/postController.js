@@ -1,7 +1,7 @@
 import Post from "../models/postModel.js";
 import { handleErrors } from "../utils/helpers.js";
 import cloudinary from "../config/cloudinaryConfig.js";
-import fs from "fs";
+import readingTime from "reading-time";
 
 export const getPosts = async (req, res) => {
   try {
@@ -81,7 +81,7 @@ export const createPost = async (req, res) => {
 
 export const updatePost = async (req, res) => {
   const { id } = req.params;
-  const { title, content } = req.body;
+  const { title, content, headerImage, imgPublicId } = req.body;
 
   try {
     const updatedPost = await Post.findById(id);
@@ -93,8 +93,14 @@ export const updatePost = async (req, res) => {
       });
     }
 
+    if (headerImage && updatedPost.imgPublicId) {
+      await cloudinary.uploader.destroy(updatedPost.imgPublicId);
+    }
+
     updatedPost.title = title || updatedPost.title;
     updatedPost.content = content || updatedPost.content;
+    updatedPost.headerImage = headerImage || updatedPost.headerImage;
+    updatedPost.imgPublicId = imgPublicId || updatedPost.imgPublicId;
 
     await updatedPost.save();
 
@@ -112,6 +118,19 @@ export const deletePost = async (req, res) => {
   const { id } = req.params;
 
   try {
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Post not found",
+      });
+    }
+
+    if (post.imgPublicId) {
+      await cloudinary.uploader.destroy(post.imgPublicId);
+    }
+
     await Post.findByIdAndDelete(id);
 
     res.status(200).json({
@@ -140,7 +159,9 @@ export const uploadImage = async (req, res) => {
       stream.end(req.file.buffer);
     });
 
-    res.status(200).json({ imageUrl: result.secure_url });
+    res
+      .status(200)
+      .json({ imageUrl: result.secure_url, publicId: result.public_id });
   } catch (error) {
     handleErrors(res, error);
   }
