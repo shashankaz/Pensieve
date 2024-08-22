@@ -50,6 +50,28 @@ const BlogPage = () => {
     fetchMorePosts();
   }, []);
 
+  useEffect(() => {
+    const checkBookmarkStatus = async () => {
+      if (user) {
+        try {
+          const response = await fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/api/posts/bookmark/${user.uid}`
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setBookmark(data.bookmarks.includes(id));
+          } else {
+            console.error("Error fetching bookmark status");
+          }
+        } catch (error) {
+          console.error("Error checking bookmark status:", error);
+        }
+      }
+    };
+
+    checkBookmarkStatus();
+  }, [user, id]);
+
   const formatDate = (date) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(date).toLocaleDateString("en-US", options);
@@ -99,6 +121,22 @@ const BlogPage = () => {
     }
   };
 
+  const handleBookmark = async () => {
+    if (!user) return;
+
+    try {
+      await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/posts/${id}/${user.uid}`,
+        {
+          method: "POST",
+        }
+      );
+      setBookmark((prev) => !prev);
+    } catch (error) {
+      console.error("Error updating bookmark:", error);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -118,11 +156,11 @@ const BlogPage = () => {
   return (
     <div className="min-h-screen flex justify-center py-10 pt-32 px-4">
       <main className="w-full max-w-3xl mx-auto">
-        <div className="w-[48rem] h-[25.5rem] overflow-hidden">
+        <div className="w-full h-64 sm:h-80 md:h-96 lg:h-[25.5rem] overflow-hidden">
           <img
             src={post.headerImage}
             alt="Blog Header"
-            className="w-full h-auto object-cover"
+            className="w-full h-full object-cover"
           />
         </div>
 
@@ -145,15 +183,13 @@ const BlogPage = () => {
             <p>{formatDate(post.createdAt)}</p>
             <span className="mx-2">•</span>
             <p>{post.readTime}</p>
-            <span className="mx-2">•</span>
+            {user && <span className="mx-2">•</span>}
             <p
-              onClick={(e) => {
-                setBookmark(!bookmark);
-              }}
+              onClick={handleBookmark}
               className="cursor-pointer"
               title="Bookmark this post"
             >
-              {bookmark ? <FaBookmark /> : <FaRegBookmark />}
+              {user ? bookmark ? <FaBookmark /> : <FaRegBookmark /> : null}
             </p>
           </div>
           <div

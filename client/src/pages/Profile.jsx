@@ -34,16 +34,29 @@ const Profile = () => {
 
       const fetchBookmarks = async () => {
         try {
-          // const response = await fetch(
-          //   `${import.meta.env.VITE_BACKEND_URL}/api/users/${
-          //     user.uid
-          //   }/bookmarks`
-          // );
-          // const data = await response.json();
-          // setBookmarks(data.posts || []);
-          setLoadingBookmarks(false);
+          const response = await fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/api/posts/bookmark/${user.uid}`
+          );
+          if (!response.ok) throw new Error("Error fetching bookmarks");
+
+          const data = await response.json();
+          const bookmarkedPostIds = data.bookmarks || [];
+
+          const bookmarkPosts = await Promise.all(
+            bookmarkedPostIds.map(async (id) => {
+              const postResponse = await fetch(
+                `${import.meta.env.VITE_BACKEND_URL}/api/posts/${id}`
+              );
+              const postData = await postResponse.json();
+              return postData.post;
+            })
+          );
+
+          setBookmarks(bookmarkPosts);
         } catch (error) {
-          console.error("Error fetching bookmarks: ", error);
+          console.error("Error checking bookmark status:", error);
+          setBookmarks([]);
+        } finally {
           setLoadingBookmarks(false);
         }
       };
@@ -234,11 +247,11 @@ const Profile = () => {
         {activeTab === "bookmark" && (
           <div className="py-6">
             <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-              Your Bookmarks ({bookmarks.length})
+              Your Bookmarks ({bookmarks?.length || 0})
             </h2>
             {loadingBookmarks ? (
               <p className="text-gray-600">Loading bookmarks...</p>
-            ) : bookmarks.length > 0 ? (
+            ) : bookmarks?.length > 0 ? (
               <ul>
                 {bookmarks.map((post) => {
                   const truncatedContent =

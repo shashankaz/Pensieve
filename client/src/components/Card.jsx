@@ -47,10 +47,10 @@ const Card = ({ post }) => {
         <div className="flex justify-between items-center mt-4 text-gray-600 text-sm">
           <div>{formattedDate}</div>
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
+            {/* <div className="flex items-center gap-1">
               <FaBookmark color="#374151" />
               {post.likes}
-            </div>
+            </div> */}
             <div className="flex items-center gap-1">
               <FaComment color="#374151" />
               {post.comments.length}

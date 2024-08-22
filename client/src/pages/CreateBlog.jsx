@@ -41,6 +41,13 @@ const CreateBlog = () => {
     }
   };
 
+  const calculateReadingTime = (text) => {
+    const wordsPerMinute = 200;
+    const textLength = text.split(/\s+/).length;
+    const minutes = Math.ceil(textLength / wordsPerMinute);
+    return `${minutes} min read`;
+  };
+
   const generateContent = async () => {
     if (!title) {
       setErrorMessage("Please enter a title first to generate content.");
@@ -49,6 +56,9 @@ const CreateBlog = () => {
     setErrorMessage("");
     const aiResponse = await getAIResponse(title);
     setContent(aiResponse);
+
+    const readTimeEstimate = calculateReadingTime(aiResponse);
+    setReadTime(readTimeEstimate);
   };
 
   useEffect(() => {

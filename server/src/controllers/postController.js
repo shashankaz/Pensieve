@@ -1,4 +1,5 @@
 import Post from "../models/postModel.js";
+import User from "../models/userModel.js";
 import { handleErrors } from "../utils/helpers.js";
 import cloudinary from "../config/cloudinaryConfig.js";
 
@@ -57,6 +58,26 @@ export const getPostByUserId = async (req, res) => {
       message: "Posts fetched successfully",
       posts,
     });
+  } catch (error) {
+    handleErrors(res, error);
+  }
+};
+
+export const getBookmarkByUserId = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: "fail", message: "User not found" });
+    }
+
+    const bookmarkedPosts = user.bookmarks;
+
+    res.status(200).json({ status: "success", bookmarks: bookmarkedPosts });
   } catch (error) {
     handleErrors(res, error);
   }
@@ -161,6 +182,47 @@ export const uploadImage = async (req, res) => {
     res
       .status(200)
       .json({ imageUrl: result.secure_url, publicId: result.public_id });
+  } catch (error) {
+    handleErrors(res, error);
+  }
+};
+
+export const updateBookmark = async (req, res) => {
+  const { id, userId } = req.params;
+
+  try {
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: "fail", message: "User not found" });
+    }
+
+    const postExists = await Post.findById(id);
+
+    if (!postExists) {
+      return res
+        .status(404)
+        .json({ status: "fail", message: "Post not found" });
+    }
+
+    const isBookmarked = user.bookmarks.includes(id);
+
+    if (isBookmarked) {
+      user.bookmarks = user.bookmarks.filter((postId) => postId !== id);
+    } else {
+      user.bookmarks.push(id);
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      message: isBookmarked
+        ? "Bookmark removed successfully"
+        : "Bookmark added successfully",
+      bookmarks: user.bookmarks,
+    });
   } catch (error) {
     handleErrors(res, error);
   }
