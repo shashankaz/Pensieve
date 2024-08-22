@@ -129,7 +129,7 @@ Obtain these credentials from your Firebase project settings.
 ### Base URL
 
 ```
-http://localhost:5000/api/posts
+http://localhost:3000/api/posts
 ```
 
 ### Endpoints
@@ -139,11 +139,13 @@ http://localhost:5000/api/posts
 | GET    | `/`                            | Get all posts                                     |
 | GET    | `/:id`                         | Get a single post by ID                           |
 | GET    | `/user/:userId`                | Get all posts by a specific user                  |
+| GET    | `/bookmark/:userId`            | Get all bookmarks by a specific user              |
 | POST   | `/`                            | Create a new post                                 |
 | PUT    | `/:id`                         | Update a post by ID                               |
 | DELETE | `/:id`                         | Delete a post by ID                               |
 | POST   | `/:id/comments`                | Add a comment to a post                           |
 | POST   | `/upload`                      | Upload a header image using Multer and Cloudinary |
+| POST   | `/:id/:userId`                 | Update bookmarks for a user                       |
 
 ## Technologies Used
 
