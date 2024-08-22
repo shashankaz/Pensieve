@@ -15,28 +15,30 @@ const Card = ({ post }) => {
 
   return (
     <Link to={`/blog/${post._id}`}>
-      <div className="mb-6 py-6 border-b">
+      <div className="mb-6 py-6 border-b border-gray-300">
         <div className="flex items-center gap-2 mb-2">
-          <div className="h-6 w-6 rounded-full bg-black overflow-hidden">
+          <div className="h-6 w-6 rounded-full bg-black dark:bg-gray-700 overflow-hidden">
             <img
               src={post.author.profileImage}
               alt="Profile"
               className="w-full h-full object-cover"
             />
           </div>
-          <p className="text-gray-700 text-sm">{post.author.name}</p>
+          <p className="text-gray-700 dark:text-gray-300 text-sm">
+            {post.author.name}
+          </p>
         </div>
         <div className="flex flex-row items-start gap-6 md:gap-8">
           <div className="flex-1">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
               {post.title}
             </h1>
             <p
-              className="text-gray-700 mb-4 font-semibold line-clamp-3"
+              className="text-gray-700 dark:text-gray-400 mb-4 font-semibold line-clamp-3"
               dangerouslySetInnerHTML={{ __html: truncatedContent }}
             ></p>
           </div>
-          <div className="w-24 h-16 md:w-48 md:h-32 bg-gray-200 rounded-sm overflow-hidden">
+          <div className="w-24 h-16 md:w-48 md:h-32 bg-gray-200 dark:bg-gray-700 rounded-sm overflow-hidden">
             <img
               src={post.headerImage}
               alt="Blog Preview"
@@ -44,7 +46,7 @@ const Card = ({ post }) => {
             />
           </div>
         </div>
-        <div className="flex justify-between items-center mt-4 text-gray-600 text-sm">
+        <div className="flex justify-between items-center mt-4 text-gray-600 dark:text-gray-400 text-sm">
           <div>{formattedDate}</div>
           <div className="flex items-center gap-4">
             {/* <div className="flex items-center gap-1">
@@ -52,7 +54,7 @@ const Card = ({ post }) => {
               {post.likes}
             </div> */}
             <div className="flex items-center gap-1">
-              <FaComment color="#374151" />
+              <FaComment className="text-gray-600 dark:text-gray-400" />
               {post.comments.length}
             </div>
           </div>

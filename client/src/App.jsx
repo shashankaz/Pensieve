@@ -21,6 +21,7 @@ const EditProfile = lazy(() => import("./pages/EditProfile"));
 const SignIn = lazy(() => import("./pages/SignIn"));
 const SignUp = lazy(() => import("./pages/SignUp"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+import { ThemeProvider } from "./utils/ThemeContext";
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -46,25 +47,27 @@ const App = () => {
   return (
     <div>
       <Suspense fallback={<Loading />}>
-        <Router>
-          <Layout>
-            <Routes>
-              {user ? (
-                <Route path="/" element={<Feed />} />
-              ) : (
-                <Route path="/" element={<Home />} />
-              )}
-              <Route path="/blog/:id" element={<BlogPage />} />
-              <Route path="/create" element={<CreateBlog />} />
-              <Route path="/edit-post/:id" element={<EditPost />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/edit-profile" element={<EditProfile />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Layout>
-        </Router>
+        <ThemeProvider>
+          <Router>
+            <Layout>
+              <Routes>
+                {user ? (
+                  <Route path="/" element={<Feed />} />
+                ) : (
+                  <Route path="/" element={<Home />} />
+                )}
+                <Route path="/blog/:id" element={<BlogPage />} />
+                <Route path="/create" element={<CreateBlog />} />
+                <Route path="/edit-post/:id" element={<EditPost />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/edit-profile" element={<EditProfile />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Layout>
+          </Router>
+        </ThemeProvider>
       </Suspense>
     </div>
   );

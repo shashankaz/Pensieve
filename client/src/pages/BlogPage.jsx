@@ -140,7 +140,9 @@ const BlogPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-600 text-xl">Loading...</div>
+        <div className="text-gray-600 dark:text-gray-400 text-xl">
+          Loading...
+        </div>
       </div>
     );
   }
@@ -148,13 +150,15 @@ const BlogPage = () => {
   if (!post) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-600 text-xl">No post found</div>
+        <div className="text-gray-600 dark:text-gray-400 text-xl">
+          No post found
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex justify-center py-10 pt-32 px-4">
+    <div className="min-h-screen flex justify-center py-10 pt-32 px-4 bg-white dark:bg-gray-900">
       <main className="w-full max-w-3xl mx-auto">
         <div className="w-full h-64 sm:h-80 md:h-96 lg:h-[25.5rem] overflow-hidden">
           <img
@@ -165,7 +169,9 @@ const BlogPage = () => {
         </div>
 
         <article className="py-6">
-          <h2 className="text-4xl font-bold text-gray-800">{post.title}</h2>
+          <h2 className="text-4xl font-bold text-gray-800 dark:text-white">
+            {post.title}
+          </h2>
           <div className="flex items-center mt-4">
             <img
               src={post.author.profileImage}
@@ -173,13 +179,15 @@ const BlogPage = () => {
               className="w-12 h-12 rounded-full mr-4"
             />
             <div>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 By <span className="font-bold">{post.author.name}</span>
               </p>
-              <p className="text-gray-500 text-sm">{post.author.bio}</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                {post.author.bio}
+              </p>
             </div>
           </div>
-          <div className="mt-4 flex items-center text-gray-600">
+          <div className="mt-4 flex items-center text-gray-600 dark:text-gray-400">
             <p>{formatDate(post.createdAt)}</p>
             <span className="mx-2">•</span>
             <p>{post.readTime}</p>
@@ -193,19 +201,19 @@ const BlogPage = () => {
             </p>
           </div>
           <div
-            className="mt-6 text-gray-700 space-y-6"
+            className="mt-6 text-gray-700 dark:text-gray-300 space-y-6"
             dangerouslySetInnerHTML={{ __html: post.content }}
           ></div>
 
           <div className="mt-6">
             {user && (
               <div>
-                <h3 className="text-xl md:text-2xl font-bold text-gray-800 border-t pt-4">
+                <h3 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white border-t pt-4">
                   Leave your comment
                 </h3>
                 <div className="mt-4">
                   <textarea
-                    className="w-full border p-2"
+                    className="w-full border p-2 dark:bg-gray-800 dark:text-gray-200"
                     rows="4"
                     placeholder="Add a comment..."
                     value={newComment}
@@ -223,20 +231,22 @@ const BlogPage = () => {
 
             {post.comments.length > 0 && (
               <div>
-                <h3 className="text-xl md:text-2xl font-bold text-gray-800 pt-4">
+                <h3 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white pt-4">
                   Comments ({post.comments.length})
                 </h3>
                 <ul className="space-y-4 mt-4">
                   {post.comments.map((comment) => (
                     <li key={comment._id} className="border-b pb-4">
-                      <p className="text-gray-600">
+                      <p className="text-gray-600 dark:text-gray-400">
                         <span className="font-bold">{comment.username}</span>{" "}
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
                           {formatDistanceToNow(new Date(comment.createdAt), {
                             addSuffix: true,
                           })}
                         </span>
-                        <p className="text-gray-700 mt-2">{comment.text}</p>
+                        <p className="text-gray-700 dark:text-gray-300 mt-2">
+                          {comment.text}
+                        </p>
                       </p>
                     </li>
                   ))}
@@ -265,14 +275,16 @@ const BlogPage = () => {
           </div>
         </article>
 
-        <div className="py-6 border-t">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">Other Posts</h3>
+        <div className="py-6 border-t dark:border-gray-700">
+          <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
+            Other Posts
+          </h3>
           <ul className="space-y-4">
             {morePosts.map((relatedPost, index) => (
               <li key={index}>
                 <Link
                   to={`/blog/${relatedPost._id}`}
-                  className="text-blue-600 hover:text-blue-800"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
                 >
                   {relatedPost.title}
                 </Link>

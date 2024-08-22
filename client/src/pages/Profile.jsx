@@ -128,14 +128,14 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex flex-col py-10 pt-32 px-4 sm:px-8 md:px-16 lg:px-32">
+    <div className="min-h-[calc(100vh-4rem)] flex flex-col py-10 pt-32 px-4 sm:px-8 md:px-16 lg:px-32 bg-white dark:bg-gray-900">
       <div className="w-full max-w-2xl">
-        <div className="flex gap-8 border-b">
+        <div className="flex gap-8 border-b border-gray-300 dark:border-gray-700">
           <button
             className={`text-lg font-semibold pb-2 ${
               activeTab === "profile"
                 ? "border-b-2 border-green-600 text-green-600"
-                : "text-gray-600 hover:text-gray-800"
+                : "text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
             }`}
             onClick={() => setActiveTab("profile")}
           >
@@ -145,7 +145,7 @@ const Profile = () => {
             className={`text-lg font-semibold pb-2 ${
               activeTab === "posts"
                 ? "border-b-2 border-green-600 text-green-600"
-                : "text-gray-600 hover:text-gray-800"
+                : "text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
             }`}
             onClick={() => setActiveTab("posts")}
           >
@@ -155,7 +155,7 @@ const Profile = () => {
             className={`text-lg font-semibold pb-2 ${
               activeTab === "bookmark"
                 ? "border-b-2 border-green-600 text-green-600"
-                : "text-gray-600 hover:text-gray-800"
+                : "text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
             }`}
             onClick={() => setActiveTab("bookmark")}
           >
@@ -167,7 +167,9 @@ const Profile = () => {
           <div className="py-6">
             <div className="flex flex-col">
               {loadingBio ? (
-                <p className="text-gray-600">Loading profile...</p>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Loading profile...
+                </p>
               ) : (
                 <>
                   <div className="w-32 h-32 mb-4">
@@ -177,16 +179,18 @@ const Profile = () => {
                       className="w-full h-full rounded-full object-cover"
                     />
                   </div>
-                  <h1 className="text-3xl sm:text-4xl font-semibold mb-1">
+                  <h1 className="text-3xl sm:text-4xl font-semibold mb-1 dark:text-white">
                     {user.displayName}
                   </h1>
-                  <p className="text-gray-600">{user.email}</p>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {user.email}
+                  </p>
                   <input
                     type="text"
                     placeholder="Bio"
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
-                    className="mt-2"
+                    className="mt-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-200 rounded-md p-2"
                   />
                   <div className="flex gap-4">
                     <button
@@ -210,11 +214,13 @@ const Profile = () => {
 
         {activeTab === "posts" && (
           <div className="py-6">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">
               Your Blog Posts ({posts.length})
             </h2>
             {loadingPosts ? (
-              <p className="text-gray-600">Loading posts...</p>
+              <p className="text-gray-600 dark:text-gray-400">
+                Loading posts...
+              </p>
             ) : posts.length > 0 ? (
               <ul>
                 {posts.map((post) => {
@@ -225,10 +231,10 @@ const Profile = () => {
 
                   return (
                     <Link to={`/blog/${post._id}`} key={post._id}>
-                      <li className="p-4 bg-gray-50 mb-6 rounded-lg shadow-md hover:shadow-lg">
+                      <li className="p-4 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-300 mb-6 rounded-lg shadow-md hover:shadow-lg">
                         <h3 className="text-xl font-semibold">{post.title}</h3>
                         <p
-                          className="text-gray-600"
+                          className="text-gray-600 dark:text-gray-400"
                           dangerouslySetInnerHTML={{ __html: truncatedContent }}
                         ></p>
                       </li>
@@ -237,7 +243,7 @@ const Profile = () => {
                 })}
               </ul>
             ) : (
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 You have not created any posts yet.
               </p>
             )}
@@ -246,11 +252,13 @@ const Profile = () => {
 
         {activeTab === "bookmark" && (
           <div className="py-6">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">
               Your Bookmarks ({bookmarks?.length || 0})
             </h2>
             {loadingBookmarks ? (
-              <p className="text-gray-600">Loading bookmarks...</p>
+              <p className="text-gray-600 dark:text-gray-400">
+                Loading bookmarks...
+              </p>
             ) : bookmarks?.length > 0 ? (
               <ul>
                 {bookmarks.map((post) => {
@@ -261,10 +269,10 @@ const Profile = () => {
 
                   return (
                     <Link to={`/blog/${post._id}`} key={post._id}>
-                      <li className="p-4 bg-gray-50 mb-6 rounded-lg shadow-md hover:shadow-lg">
+                      <li className="p-4 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-300 mb-6 rounded-lg shadow-md hover:shadow-lg">
                         <h3 className="text-xl font-semibold">{post.title}</h3>
                         <p
-                          className="text-gray-600"
+                          className="text-gray-600 dark:text-gray-400"
                           dangerouslySetInnerHTML={{ __html: truncatedContent }}
                         ></p>
                       </li>
@@ -273,7 +281,7 @@ const Profile = () => {
                 })}
               </ul>
             ) : (
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 You have not bookmarked any posts yet.
               </p>
             )}

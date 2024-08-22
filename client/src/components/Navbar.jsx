@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { IoCreateOutline } from "react-icons/io5";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase";
+import { ThemeContext } from "../utils/ThemeContext";
+import { MdLightMode, MdDarkMode } from "react-icons/md";
 
 const Navbar = () => {
   const [user] = useAuthState(auth);
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   return (
     <nav
       className={`${
         user ? "bg-white" : "bg-transparent"
-      } flex justify-between items-center fixed w-full h-20 border-b border-black px-4 sm:px-8 md:px-16 lg:px-32 transition-colors duration-300`}
+      } dark:bg-black dark:text-white flex justify-between items-center fixed w-full h-20 border-b border-black dark:border-white px-4 sm:px-8 md:px-16 lg:px-32 transition-colors duration-300`}
     >
       <div>
         <Link to={"/"}>
@@ -28,6 +31,13 @@ const Navbar = () => {
               <div className="hidden md:flex">Write</div>
             </div>
           </Link>
+          <button onClick={toggleTheme} className="p-2 rounded">
+            {theme === "light" ? (
+              <MdDarkMode size={20} />
+            ) : (
+              <MdLightMode size={20} />
+            )}
+          </button>
           <Link to={"/profile"}>
             <img
               src={user.photoURL || "https://picsum.photos/100"}
@@ -56,7 +66,7 @@ const Navbar = () => {
               </button>
             </Link>
             <Link to={"/signup"}>
-              <button className="text-white bg-black px-4 py-2 rounded-3xl hover:bg-green-600 transition-colors duration-300">
+              <button className="text-white bg-black px-4 py-2 rounded-3xl dark:bg-green-600 dark:hover:bg-green-700 transition-colors duration-300">
                 Get started
               </button>
             </Link>

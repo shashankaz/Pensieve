@@ -38,7 +38,7 @@ const Suggestions = () => {
   ];
 
   return (
-    <div className="hidden lg:flex flex-col min-w-[30%] h-screen mt-20 fixed border-l border-black p-4">
+    <div className="hidden lg:flex flex-col min-w-[30%] h-screen mt-20 fixed border-l border-black dark:border-white p-4 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
       <h2 className="text-lg font-bold mb-4">Suggestions</h2>
       {loading ? (
         <div className="text-gray-600">Loading suggestions...</div>
@@ -49,7 +49,7 @@ const Suggestions = () => {
             <ul className="space-y-2">
               {featuredPosts.map((post) => (
                 <a key={post._id} href={`/post/${post.slug}`}>
-                  <li className="bg-gray-200 py-1 px-3 rounded-3xl hover:bg-gray-300 mb-2">
+                  <li className="bg-gray-100 dark:bg-gray-700 py-1 px-3 rounded-3xl hover:bg-gray-300 mb-2">
                     {post.title}
                   </li>
                 </a>
@@ -62,7 +62,7 @@ const Suggestions = () => {
             <ul className="space-y-2">
               {mostViewedPosts.map((post) => (
                 <a key={post._id} href={`/post/${post.slug}`}>
-                  <li className="bg-gray-200 py-1 px-3 rounded-3xl hover:bg-gray-300 mb-2">
+                  <li className="bg-gray-100 dark:bg-gray-700 py-1 px-3 rounded-3xl hover:bg-gray-300 mb-2">
                     {post.title}
                   </li>
                 </a>

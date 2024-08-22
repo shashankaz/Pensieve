@@ -7,7 +7,7 @@ const Feed = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex justify-end">
+      <div className="flex justify-end bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
         <Blogs />
         <Suggestions />
       </div>

@@ -109,24 +109,20 @@ const EditPost = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-10 pt-20">
+    <div className="min-h-screen flex items-center justify-center py-10 pt-20 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-4xl my-8 mx-4 sm:mx-8 md:mx-16 lg:mx-32"
       >
-        <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">
-          Edit Blog Post
-        </h2>
+        <h2 className="text-3xl font-bold mb-6 text-center">Edit Blog Post</h2>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Title
-          </label>
+          <label className="block text-sm font-bold mb-2">Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="rounded w-full py-2 text-gray-700 outline-none"
+            className="rounded w-full py-2 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 outline-none"
             placeholder="Enter the title"
             required
           />
@@ -137,12 +133,10 @@ const EditPost = () => {
         )}
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Header Image
-          </label>
+          <label className="block text-sm font-bold mb-2">Header Image</label>
           <input
             type="file"
-            className="rounded w-full py-2 text-gray-700"
+            className="rounded w-full py-2 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200"
             onChange={(e) => setHeaderImage(e.target.files[0])}
           />
           <button
@@ -152,7 +146,9 @@ const EditPost = () => {
               setUploading(true);
               await handleImageUpload();
             }}
-            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded mt-2"
+            className={`mt-2 py-2 px-6 rounded font-bold ${
+              uploading ? "cursor-not-allowed" : ""
+            } bg-gray-500 dark:bg-gray-700 text-white hover:bg-gray-600 dark:hover:bg-gray-800`}
             disabled={uploading}
           >
             {uploading ? "Uploading..." : "Upload"}
@@ -170,13 +166,11 @@ const EditPost = () => {
         )}
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Content
-          </label>
+          <label className="block text-sm font-bold mb-2">Content</label>
           <ReactQuill
             value={content}
             onChange={setContent}
-            className="rounded w-full py-2 text-gray-700"
+            className="rounded w-full py-2 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200"
             placeholder="Write your content here..."
             theme="snow"
             style={{ height: "400px", overflowY: "auto" }}
@@ -195,7 +189,7 @@ const EditPost = () => {
         <div className="flex justify-center mt-6">
           <button
             type="submit"
-            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded"
+            className="bg-green-600 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800 text-white font-bold py-2 px-6 rounded"
           >
             Update Post
           </button>

@@ -159,24 +159,22 @@ const CreateBlog = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-10 pt-20">
+    <div className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex items-center justify-center py-10 pt-20">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-4xl my-8 mx-4 sm:mx-8 md:mx-16 lg:mx-32"
       >
-        <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">
+        <h2 className="text-3xl font-bold mb-6 text-center">
           Create a Blog Post
         </h2>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Title
-          </label>
+          <label className="block text-sm font-bold mb-2">Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="rounded w-full py-2 text-gray-700 outline-none"
+            className="rounded w-full py-2 outline-none bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200"
             placeholder="Enter the title"
             required
           />
@@ -187,12 +185,10 @@ const CreateBlog = () => {
         )}
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Header Image
-          </label>
+          <label className="block text-sm font-bold mb-2">Header Image</label>
           <input
             type="file"
-            className="rounded w-full py-2 text-gray-700"
+            className="rounded w-full py-2 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200"
             onChange={(e) => setHeaderImage(e.target.files[0])}
             required
           />
@@ -203,7 +199,9 @@ const CreateBlog = () => {
               setUploading(true);
               await handleImageUpload();
             }}
-            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded mt-2"
+            className={`mt-2 py-2 px-6 rounded font-bold ${
+              uploading ? "cursor-not-allowed" : ""
+            } bg-gray-500 dark:bg-gray-700 text-white hover:bg-gray-600 dark:hover:bg-gray-800`}
             disabled={uploading}
           >
             {uploading ? "Uploading..." : "Upload"}
@@ -221,13 +219,11 @@ const CreateBlog = () => {
         )}
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Content
-          </label>
+          <label className="block text-sm font-bold mb-2">Content</label>
           <ReactQuill
             value={content}
             onChange={setContent}
-            className="rounded w-full py-2 text-gray-700"
+            className="rounded w-full py-2 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200"
             placeholder="Write your content here..."
             theme="snow"
             style={{ height: "400px", overflowY: "auto" }}
@@ -247,7 +243,7 @@ const CreateBlog = () => {
           <button
             type="button"
             onClick={generateContent}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded"
+            className="bg-blue-500 dark:bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-800 text-white font-bold py-2 px-6 rounded"
           >
             Generate Content with AI
           </button>
@@ -256,7 +252,7 @@ const CreateBlog = () => {
         <div className="flex justify-center mt-6">
           <button
             type="submit"
-            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded"
+            className="bg-green-600 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800 text-white font-bold py-2 px-6 rounded"
           >
             Create Post
           </button>
