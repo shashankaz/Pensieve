@@ -32,7 +32,7 @@ const Blogs = () => {
     .reverse();
 
   return (
-    <div className="mx-4 sm:mx-8 md:mx-16 lg:mx-24 pt-20 my-10 w-full lg:pr-[30%]">
+    <div className="mx-4 sm:mx-8 md:mx-16 lg:mx-24 pt-20 my-10 w-full lg:pr-[30%] min-h-[calc(100vh-5rem)">
       <div className="flex items-center mb-6">
         <div className="bg-gray-100 dark:bg-gray-700 text-black dark:text-white py-3 pr-2 pl-4 rounded-l-3xl">
           <CiSearch />

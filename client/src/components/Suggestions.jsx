@@ -41,7 +41,7 @@ const Suggestions = () => {
     <div className="hidden lg:flex flex-col min-w-[30%] h-screen mt-20 fixed border-l border-black dark:border-white p-4 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
       <h2 className="text-lg font-bold mb-4">Suggestions</h2>
       {loading ? (
-        <div className="text-gray-600">Loading suggestions...</div>
+        <div className="text-gray-600 dark:text-gray-400">Loading suggestions...</div>
       ) : (
         <div>
           <div>
